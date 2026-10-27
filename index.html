@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Master – Speed Test, Games & Race</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="indigo">
+<div class="app">
+
+  <header>
+    <h1>⌨️ Typing Master</h1>
+    <div class="head-tools">
+      <select id="themeSel" title="Colour theme">
+        <option value="indigo">Indigo</option>
+        <option value="green">Green</option>
+        <option value="orange">Orange</option>
+        <option value="pink">Pink</option>
+        <option value="blue">Blue</option>
+      </select>
+      <button id="soundBtn" class="icon-btn" title="Key sounds">🔇</button>
+      <button id="themeBtn" class="icon-btn" title="Dark mode">🌙</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-mode="test">⏱️ Speed Test</button>
+    <button class="tab" data-mode="game">🎮 Games</button>
+    <button class="tab" data-mode="stats">📊 My Stats</button>
+  </nav>
+
+  <!-- ================= SPEED TEST ================= -->
+  <section id="testMode" class="panel">
+    <div class="controls">
+      <label>Topic
+        <select id="topic">
+          <option value="general">General</option>
+          <option value="programming">Programming</option>
+          <option value="student">Student Life</option>
+          <option value="quotes">Motivation</option>
+          <option value="code">Code & Symbols</option>
+        </select>
+      </label>
+      <label>Passage length
+        <select id="plen">
+          <option value="short">Short (~15 words)</option>
+          <option value="medium" selected>Medium (~35 words)</option>
+          <option value="long">Long (~70 words)</option>
+        </select>
+      </label>
+      <label>Mode
+        <select id="duration">
+          <option value="30">30 seconds</option>
+          <option value="60" selected>60 seconds</option>
+          <option value="120">2 minutes</option>
+          <option value="0">Finish the passage</option>
+        </select>
+      </label>
+      <label>Text size
+        <select id="fsize">
+          <option value="17">Small</option>
+          <option value="21" selected>Normal</option>
+          <option value="26">Large</option>
+        </select>
+      </label>
+    </div>
+    <div class="toggles">
+      <label class="chk"><input type="checkbox" id="optPunct" checked> Punctuation</label>
+      <label class="chk"><input type="checkbox" id="optCaps" checked> Capital letters</label>
+      <button id="restartTest" class="btn">↻ New Passage</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span id="tTime">60</span><small id="tTimeLbl">Time left</small></div>
+      <div class="stat"><span id="tWpm">0</span><small>WPM</small></div>
+      <div class="stat"><span id="tAcc">100%</span><small>Accuracy</small></div>
+      <div class="stat"><span id="tMis">0</span><small>Mistakes</small></div>
+      <div class="stat best"><span id="tBest">0</span><small>Best WPM</small></div>
+    </div>
+    <div class="bar"><div id="tBar"></div></div>
+
+    <div id="textBox" class="text-box"></div>
+    <textarea id="typeInput" placeholder="Start typing… the timer starts with your first key" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+  </section>
+
+  <!-- ================= GAMES ================= -->
+  <section id="gameMode" class="panel hidden">
+    <div class="game-picker">
+      <button class="gcard active" data-game="rain"><span>🌧️</span><b>Word Rain</b><small>Type falling words</small></button>
+      <button class="gcard" data-game="letter"><span>🔤</span><b>Letter Pop</b><small>Pop falling letters</small></button>
+      <button class="gcard" data-game="sprint"><span>⚡</span><b>Word Sprint</b><small>Max words in time</small></button>
+      <button class="gcard" data-game="race"><span>🏁</span><b>Race vs Bot</b><small>Beat the robot</small></button>
+    </div>
+
+    <!-- Word Rain + Letter Pop -->
+    <div id="rainBox">
+      <div class="controls">
+        <label>Difficulty
+          <select id="rDiff">
+            <option value="easy">Easy (5 lives, slow)</option>
+            <option value="normal" selected>Normal (3 lives)</option>
+            <option value="hard">Hard (2 lives, fast)</option>
+          </select>
+        </label>
+        <label id="rCatWrap">Word type
+          <select id="rCat">
+            <option value="general">General</option>
+            <option value="programming">Programming</option>
+            <option value="student">Student</option>
+          </select>
+        </label>
+      </div>
+      <div class="stats">
+        <div class="stat"><span id="gScore">0</span><small>Score</small></div>
+        <div class="stat"><span id="gLives">❤️❤️❤️</span><small>Lives</small></div>
+        <div class="stat"><span id="gLevel">1</span><small>Level</small></div>
+        <div class="stat best"><span id="gBest">0</span><small>Best Score</small></div>
+      </div>
+      <div id="arena" class="arena"></div>
+      <div class="game-bar">
+        <input id="rInput" type="text" placeholder="Type here…" autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
+        <button id="rStart" class="btn">Start</button>
+        <button id="rPause" class="btn ghost" disabled>Pause</button>
+      </div>
+    </div>
+
+    <!-- Word Sprint -->
+    <div id="sprintBox" class="hidden">
+      <div class="controls">
+        <label>Time
+          <select id="sTime">
+            <option value="30">30 sec</option>
+            <option value="60" selected>60 sec</option>
+            <option value="90">90 sec</option>
+          </select>
+        </label>
+        <label>Word type
+          <select id="sCat">
+            <option value="general">General</option>
+            <option value="programming">Programming</option>
+            <option value="student">Student</option>
+          </select>
+        </label>
+        <label>Word length
+          <select id="sLen">
+            <option value="short">Short</option>
+            <option value="mixed" selected>Mixed</option>
+            <option value="long">Long</option>
+          </select>
+        </label>
+      </div>
+      <div class="stats">
+        <div class="stat"><span id="sLeft">60</span><small>Time left</small></div>
+        <div class="stat"><span id="sCount">0</span><small>Words</small></div>
+        <div class="stat"><span id="sMis">0</span><small>Mistakes</small></div>
+        <div class="stat best"><span id="sBest">0</span><small>Best words</small></div>
+      </div>
+      <div class="sprint-word" id="sWord">Press Start</div>
+      <div class="game-bar">
+        <input id="sInput" type="text" placeholder="Type the word…" autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
+        <button id="sStart" class="btn">Start</button>
+      </div>
+    </div>
+
+    <!-- Race vs Bot -->
+    <div id="raceBox" class="hidden">
+      <div class="controls">
+        <label>Bot speed
+          <select id="bSpeed">
+            <option value="20">Slow – 20 WPM</option>
+            <option value="35">Medium – 35 WPM</option>
+            <option value="50" selected>Fast – 50 WPM</option>
+            <option value="70">Pro – 70 WPM</option>
+            <option value="90">Legend – 90 WPM</option>
+          </select>
+        </label>
+        <label>Passage length
+          <select id="bLen">
+            <option value="short">Short</option>
+            <option value="medium" selected>Medium</option>
+            <option value="long">Long</option>
+          </select>
+        </label>
+        <label>Topic
+          <select id="bTopic">
+            <option value="general">General</option>
+            <option value="programming">Programming</option>
+            <option value="student">Student Life</option>
+            <option value="quotes">Motivation</option>
+          </select>
+        </label>
+      </div>
+      <div class="track">
+        <div class="lane"><span class="who">You</span><div class="road"><i id="car" class="racer">🚗</i></div></div>
+        <div class="lane"><span class="who">Bot</span><div class="road"><i id="botcar" class="racer">🤖</i></div></div>
+      </div>
+      <div id="raceMsg" class="race-msg">Press Start to race!</div>
+      <div id="raceText" class="text-box"></div>
+      <textarea id="raceInput" placeholder="Type the passage to move your car…" autocomplete="off" autocapitalize="off" spellcheck="false" disabled></textarea>
+      <div class="game-bar" style="margin-top:12px"><button id="raceStart" class="btn">Start Race</button></div>
+    </div>
+  </section>
+
+  <!-- ================= STATS ================= -->
+  <section id="statsMode" class="panel hidden">
+    <div class="stats" id="statCards"></div>
+    <h3 class="sub">Last 10 speed tests (WPM)</h3>
+    <div id="chart" class="chart"></div>
+    <h3 class="sub">Recent activity</h3>
+    <div class="table-wrap"><table id="histTable"></table></div>
+    <button id="clearData" class="btn ghost" style="margin-top:16px">Clear all my data</button>
+  </section>
+
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <h2 id="mTitle"></h2>
+    <p id="mSub" class="m-sub"></p>
+    <div id="mBody" class="m-body"></div>
+    <button id="mBtn" class="btn">OK</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
